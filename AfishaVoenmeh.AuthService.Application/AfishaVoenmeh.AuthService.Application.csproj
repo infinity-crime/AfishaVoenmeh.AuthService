@@ -11,4 +11,11 @@
     <ProjectReference Include="..\AfishaVoenmeh.AuthService.Domain\AfishaVoenmeh.AuthService.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Authentication\Commands\" />
+    <Folder Include="Authentication\Queries\" />
+    <Folder Include="Authentication\Common\" />
+    <Folder Include="Common\Interfaces\Persistence\" />
+  </ItemGroup>
+
 </Project>
