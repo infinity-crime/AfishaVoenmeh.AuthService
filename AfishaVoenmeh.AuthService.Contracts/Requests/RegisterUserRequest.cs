@@ -9,7 +9,7 @@ namespace AfishaVoenmeh.AuthService.Contracts.Requests;
 public record RegisterUserRequest(
     string FirstName, 
     string LastName, 
-    string Patronymic, // Отчество
+    string Patronymic,
     string PhoneNumber,
     string Email,
     string Password,

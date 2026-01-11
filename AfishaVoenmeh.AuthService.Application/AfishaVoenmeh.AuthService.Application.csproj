@@ -12,10 +12,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Authentication\Commands\" />
     <Folder Include="Authentication\Queries\" />
-    <Folder Include="Authentication\Common\" />
     <Folder Include="Common\Interfaces\Persistence\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="14.0.0" />
   </ItemGroup>
 
 </Project>

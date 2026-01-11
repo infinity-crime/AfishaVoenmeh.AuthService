@@ -1,5 +1,7 @@
-﻿using AfishaVoenmeh.AuthService.Contracts.Requests;
+﻿using AfishaVoenmeh.AuthService.Application.Authentication.Commands.Register;
+using AfishaVoenmeh.AuthService.Contracts.Requests;
 using AfishaVoenmeh.AuthService.Contracts.Responses;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,19 +11,37 @@ namespace AfishaVoenmeh.AuthService.WebAPI.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    [HttpPost("register")]
-    public IActionResult Register(RegisterUserRequest registerRequest)
+    private readonly ISender _sender;
+
+    public AuthController(ISender sender)
     {
-        //var response = new AuthenticationResponse(
-        //    Guid.NewGuid(),
-        //    registerRequest.FirstName,
-        //    registerRequest.LastName,
-        //    registerRequest.Patronymic,
-        //    "token...");
+        _sender = sender;
+    }
 
-        //return Ok(response);
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterUserRequest registerRequest, CancellationToken ct)
+    {
+        var command = new RegisterUserCommand
+        {
+            FirstName = registerRequest.FirstName,
+            LastName = registerRequest.LastName,
+            Patronymic = registerRequest.Patronymic,
+            Email = registerRequest.Email,
+            PhoneNumber = registerRequest.PhoneNumber,
+            Password = registerRequest.Password,
+            PasswordConfirmation = registerRequest.PasswordConfirmation
+        };
 
-        return Ok();
+        var authResult = await _sender.Send(command, ct);
+
+        var response = new AuthenticationResponse(
+            authResult.Id,
+            authResult.FirstName,
+            authResult.LastName,
+            authResult.Patronymic,
+            authResult.Token);
+
+        return Ok(response);
     }
 
     [HttpPost("login")]

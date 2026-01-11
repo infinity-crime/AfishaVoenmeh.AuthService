@@ -8,5 +8,5 @@ namespace AfishaVoenmeh.AuthService.Application.Common.Interfaces.Authentication
 
 public interface IJwtTokenGenerator
 {
-    string GenerateToken(); // написать параметры
+    string GenerateToken(Guid userId, string firstName, string lastName, string patronymic, string email);
 }

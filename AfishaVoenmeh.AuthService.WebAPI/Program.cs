@@ -1,8 +1,13 @@
+using AfishaVoenmeh.AuthService.Application;
+using AfishaVoenmeh.AuthService.Infrastructure;
 using AfishaVoenmeh.AuthService.WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.AddPresentation();
+    builder.Services
+        .AddPresentation()
+        .AddApplication()
+        .AddInfrastructure(builder.Configuration);
 }
 
 var app = builder.Build();
