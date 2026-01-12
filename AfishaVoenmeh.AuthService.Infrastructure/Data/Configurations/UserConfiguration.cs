@@ -43,8 +43,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         {
             onb.Property(ph => ph.Value).HasColumnName("PasswordHash");
         });
-
-        builder.HasIndex(u => u.Email.Value)
-            .IsUnique();
     }
 }

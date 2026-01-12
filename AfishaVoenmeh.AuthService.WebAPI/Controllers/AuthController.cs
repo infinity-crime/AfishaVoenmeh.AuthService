@@ -35,11 +35,11 @@ public class AuthController : ControllerBase
         var authResult = await _sender.Send(command, ct);
 
         var response = new AuthenticationResponse(
-            authResult.Id,
-            authResult.FirstName,
-            authResult.LastName,
-            authResult.Patronymic,
-            authResult.Token);
+            authResult.Value.Id,
+            authResult.Value.FirstName,
+            authResult.Value.LastName,
+            authResult.Value.Patronymic,
+            authResult.Value.Token);
 
         return Ok(response);
     }

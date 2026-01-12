@@ -1,5 +1,6 @@
 ﻿using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Authentication;
 using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Services;
+using AfishaVoenmeh.AuthService.Domain.UserAggregate;
 using AfishaVoenmeh.AuthService.Infrastructure.Authentication.Common;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -25,13 +26,13 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         _jwtOptions = options.Value;
     }
 
-    public string GenerateToken(Guid userId, string firstName, string lastName, string patronymic, string email)
+    public string GenerateToken(User user)
     {
         var claims = new List<Claim>
         {
-            new (ClaimTypes.NameIdentifier, userId.ToString()),
-            new (ClaimTypes.Name, $"{firstName} {lastName} {patronymic}"),
-            new (ClaimTypes.Email, email)
+            new (ClaimTypes.NameIdentifier, user.Id.Value.ToString()),
+            new (ClaimTypes.Name, $"{user.Credentials.FirstName} {user.Credentials.LastName} {user.Credentials.Patronymic}"),
+            new (ClaimTypes.Email, user.Email.Value)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey));

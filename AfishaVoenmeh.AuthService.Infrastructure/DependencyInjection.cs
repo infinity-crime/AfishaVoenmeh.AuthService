@@ -29,6 +29,8 @@ public static class DependencyInjection
 
         services.AddJwtBearerAuth(configuration);
 
+        services.AddSingleton<IPasswordHasher, PasswordHasher>();
+
         return services;
     }
 

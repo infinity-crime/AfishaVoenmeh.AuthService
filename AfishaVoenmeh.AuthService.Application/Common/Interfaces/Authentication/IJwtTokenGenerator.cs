@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AfishaVoenmeh.AuthService.Domain.UserAggregate;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,5 @@ namespace AfishaVoenmeh.AuthService.Application.Common.Interfaces.Authentication
 
 public interface IJwtTokenGenerator
 {
-    string GenerateToken(Guid userId, string firstName, string lastName, string patronymic, string email);
+    string GenerateToken(User user);
 }

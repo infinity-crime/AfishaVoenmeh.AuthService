@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using AfishaVoenmeh.AuthService.WebAPI.Common;
+using Microsoft.OpenApi.Models;
 
 namespace AfishaVoenmeh.AuthService.WebAPI;
 
@@ -9,6 +10,8 @@ public static class DependencyInjection
         services.AddControllers();
 
         services.AddConfiguredSwagger();
+
+        services.AddAsyncInitializer<DbInitializer>();
 
         return services;
     }
