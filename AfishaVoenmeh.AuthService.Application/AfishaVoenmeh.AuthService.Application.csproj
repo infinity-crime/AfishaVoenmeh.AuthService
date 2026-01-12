@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="Authentication\Queries\" />
-    <Folder Include="Common\Interfaces\Persistence\" />
   </ItemGroup>
 
   <ItemGroup>
