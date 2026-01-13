@@ -1,4 +1,5 @@
 ﻿using AfishaVoenmeh.AuthService.Application.Authentication.Common;
+using AfishaVoenmeh.AuthService.Application.Common.Errors;
 using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Authentication;
 using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Persistence;
 using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Services;
@@ -6,11 +7,6 @@ using AfishaVoenmeh.AuthService.Domain.UserAggregate;
 using AfishaVoenmeh.AuthService.Domain.UserAggregate.ValueObjects;
 using ErrorOr;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AfishaVoenmeh.AuthService.Application.Authentication.Commands.Register;
 
@@ -35,10 +31,10 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
     public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
     {
         if (await _userRepository.GetByEmailAsync(command.Email, cancellationToken) != null)
-            return Error.Conflict("User_Email_Exists", $"User with email {command.Email} already exists.");
+            return AuthenticationErrors.DublicateEmail;
 
         if (command.Password != command.PasswordConfirmation)
-            return Error.Conflict("Password_Confirmation_Failed", "Password confirmation failed.");
+            return AuthenticationErrors.PasswordConfirmationFailed;
 
         var userCreds = UserCredentials.Create(command.FirstName, command.LastName, command.Patronymic);
         if (userCreds.IsError)
@@ -54,7 +50,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
 
         var hashedPassword = _passwordHasher.HashPassword(command.Password);
         var userPasswordHash = PasswordHash.Create(hashedPassword);
-        if(userPasswordHash.IsError)
+        if (userPasswordHash.IsError)
             return userPasswordHash.FirstError;
 
         var newUser = new User(userCreds.Value, userEmail.Value, userPhoneNumber.Value, userPasswordHash.Value);
@@ -63,11 +59,16 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
 
         var token = _tokenGenerator.GenerateToken(newUser);
 
+        return MapToAuthResult(newUser, token);
+    }
+
+    private static AuthenticationResult MapToAuthResult(User newUser, string token)
+    {
         return new AuthenticationResult(
-            newUser.Id.Value,
-            newUser.Credentials.FirstName,
-            newUser.Credentials.LastName,
-            newUser.Credentials.Patronymic,
-            token);
+                    newUser.Id.Value,
+                    newUser.Credentials.FirstName,
+                    newUser.Credentials.LastName,
+                    newUser.Credentials.Patronymic,
+                    token);
     }
 }

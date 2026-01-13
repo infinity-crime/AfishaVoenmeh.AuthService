@@ -1,6 +1,7 @@
 using AfishaVoenmeh.AuthService.Application;
 using AfishaVoenmeh.AuthService.Infrastructure;
 using AfishaVoenmeh.AuthService.WebAPI;
+using AfishaVoenmeh.AuthService.WebAPI.Middeware;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -17,6 +18,8 @@ var app = builder.Build();
         app.UseSwagger();
         app.UseSwaggerUI();
     }
+
+    app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
     app.UseHttpsRedirection();
     app.UseAuthorization();
