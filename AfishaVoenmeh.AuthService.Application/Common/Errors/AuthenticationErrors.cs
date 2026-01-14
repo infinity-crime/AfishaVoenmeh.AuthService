@@ -15,4 +15,9 @@ public static class AuthenticationErrors
     public static Error PasswordConfirmationFailed =>
         Error.Conflict("Password_Confirmation_Failed", "Passwords must match.");
 
+    public static Error EmailNotFound =>
+        Error.NotFound("Email_Not_Found", "A user with this email does not exist.");
+
+    public static Error IncorrectPassword =>
+        Error.Conflict("Password_Incorrect", "Incorrect password entered.");
 }

@@ -1,10 +1,10 @@
 ﻿using AfishaVoenmeh.AuthService.Application.Authentication.Commands.Register;
+using AfishaVoenmeh.AuthService.Application.Authentication.Queries.Login;
 using AfishaVoenmeh.AuthService.Contracts.Requests;
 using AfishaVoenmeh.AuthService.Contracts.Responses;
 using AfishaVoenmeh.AuthService.WebAPI.Controllers.Common;
 using MapsterMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AfishaVoenmeh.AuthService.WebAPI.Controllers;
@@ -34,9 +34,15 @@ public class AuthController : ApiController
             errors => Problem(errors));
     }
 
-    //[HttpPost("login")]
-    //public IActionResult Login(LoginUserRequest loginRequest)
-    //{
-    //    return Ok();
-    //}
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginUserRequest loginRequest, CancellationToken ct)
+    {
+        var query = _mapper.Map<LoginUserQuery>(loginRequest);
+
+        var authResult = await _sender.Send(query, ct);
+
+        return authResult.Match(
+            authResult => Ok(authResult),
+            errors => Problem(errors));
+    }
 }
