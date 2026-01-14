@@ -15,7 +15,7 @@ public static class DependencyInjection
 
         services.AddAsyncInitializer<DbInitializer>();
 
-        services.AddMapings();
+        services.AddMappings();
 
         return services;
     }
@@ -29,14 +29,14 @@ public static class DependencyInjection
             {
                 Title = "AuthService (AfishaVoenmeh)",
                 Version = "v1",
-                Description = "A microservice for user authentication in the AfishaVoenmekh system."
+                Description = "A microservice for user authentication in the AfishaVoenmeh system."
             });
         });
 
         return services;
     }
 
-    private static IServiceCollection AddMapings(this IServiceCollection services)
+    private static IServiceCollection AddMappings(this IServiceCollection services)
     {
         var config = TypeAdapterConfig.GlobalSettings;
         config.Scan(Assembly.GetExecutingAssembly());

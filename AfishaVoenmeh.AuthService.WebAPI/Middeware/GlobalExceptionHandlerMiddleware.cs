@@ -38,7 +38,7 @@ public class GlobalExceptionHandlerMiddleware
             Type = ex.GetType().Name,
             Status = StatusCodes.Status500InternalServerError,
             Title = "Internal Server Error",
-            Detail = ex.Message
+            Detail = $"{ex.Message} | {ex.InnerException?.Message}"
         };
 
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;

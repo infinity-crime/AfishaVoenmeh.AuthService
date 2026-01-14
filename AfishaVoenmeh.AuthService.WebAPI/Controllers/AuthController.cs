@@ -1,6 +1,7 @@
 ﻿using AfishaVoenmeh.AuthService.Application.Authentication.Commands.Register;
 using AfishaVoenmeh.AuthService.Contracts.Requests;
 using AfishaVoenmeh.AuthService.Contracts.Responses;
+using AfishaVoenmeh.AuthService.WebAPI.Controllers.Common;
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +11,7 @@ namespace AfishaVoenmeh.AuthService.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthController : ControllerBase
+public class AuthController : ApiController
 {
     private readonly ISender _sender;
     private readonly IMapper _mapper;
@@ -28,14 +29,9 @@ public class AuthController : ControllerBase
 
         var authResult = await _sender.Send(command, ct);
 
-        var response = new AuthenticationResponse(
-            authResult.Value.Id,
-            authResult.Value.FirstName,
-            authResult.Value.LastName,
-            authResult.Value.Patronymic,
-            authResult.Value.Token);
-
-        return Ok(response);
+        return authResult.Match(
+            authResult => Created(HttpContext.Request.Path, authResult), 
+            errors => Problem(errors));
     }
 
     //[HttpPost("login")]
