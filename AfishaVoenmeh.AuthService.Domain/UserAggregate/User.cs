@@ -1,4 +1,5 @@
 ﻿using AfishaVoenmeh.AuthService.Domain.Common.Abstract;
+using AfishaVoenmeh.AuthService.Domain.UserAggregate.Entities;
 using AfishaVoenmeh.AuthService.Domain.UserAggregate.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,9 @@ public class User : AggregateRoot<UserId>
     public PhoneNumber PhoneNumber { get; private set; }
     public PasswordHash PasswordHash { get; private set; }
 
+    public int RoleId { get; private set; }
+    public Role Role { get; private set; }
+
     protected User() { } // EF Core
 
     public User(UserCredentials credentials, Email email, PhoneNumber phoneNumber, PasswordHash passwordHash)
@@ -24,5 +28,11 @@ public class User : AggregateRoot<UserId>
         Email = email;
         PhoneNumber = phoneNumber;
         PasswordHash = passwordHash;
+    }
+
+    public void ApplyRole(Role role)
+    {
+        RoleId = role.Id;
+        Role = role;
     }
 }
