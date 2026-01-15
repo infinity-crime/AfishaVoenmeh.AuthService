@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AfishaVoenmeh.AuthService.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260112184908_InitialCreate")]
+    [Migration("20260115145421_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,18 +25,66 @@ namespace AfishaVoenmeh.AuthService.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("AfishaVoenmeh.AuthService.Domain.UserAggregate.Entities.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Student"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Lecturer"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Inspector"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Administrator"
+                        });
+                });
+
             modelBuilder.Entity("AfishaVoenmeh.AuthService.Domain.UserAggregate.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("AfishaVoenmeh.AuthService.Domain.UserAggregate.User", b =>
                 {
+                    b.HasOne("AfishaVoenmeh.AuthService.Domain.UserAggregate.Entities.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.OwnsOne("AfishaVoenmeh.AuthService.Domain.UserAggregate.ValueObjects.Email", "Email", b1 =>
                         {
                             b1.Property<Guid>("UserId")
@@ -130,6 +178,13 @@ namespace AfishaVoenmeh.AuthService.Infrastructure.Migrations
 
                     b.Navigation("PhoneNumber")
                         .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("AfishaVoenmeh.AuthService.Domain.UserAggregate.Entities.Role", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

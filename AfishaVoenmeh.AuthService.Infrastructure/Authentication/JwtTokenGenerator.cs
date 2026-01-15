@@ -1,6 +1,8 @@
 ﻿using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Authentication;
 using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Services;
+using AfishaVoenmeh.AuthService.Domain.Common.Abstract;
 using AfishaVoenmeh.AuthService.Domain.UserAggregate;
+using AfishaVoenmeh.AuthService.Domain.UserAggregate.Entities;
 using AfishaVoenmeh.AuthService.Infrastructure.Authentication.Common;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -28,11 +30,19 @@ public class JwtTokenGenerator : IJwtTokenGenerator
 
     public string GenerateToken(User user)
     {
+        var userRole = Enumeration.GetAll<Role>()
+            .Where(role => role.Id == user.RoleId)
+            .FirstOrDefault();
+
+        if(userRole is null)
+            throw new ArgumentNullException(nameof(userRole));
+
         var claims = new List<Claim>
         {
             new (ClaimTypes.NameIdentifier, user.Id.Value.ToString()),
             new (ClaimTypes.Name, $"{user.Credentials.FirstName} {user.Credentials.LastName} {user.Credentials.Patronymic}"),
-            new (ClaimTypes.Email, user.Email.Value)
+            new (ClaimTypes.Email, user.Email.Value),
+            new (ClaimTypes.Role, userRole.Name)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey));

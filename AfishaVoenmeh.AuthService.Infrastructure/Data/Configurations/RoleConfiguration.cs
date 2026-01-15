@@ -23,7 +23,8 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
         builder.HasMany(r => r.Users)
             .WithOne(u => u.Role)
             .HasForeignKey(u => u.RoleId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasData(Enumeration.GetAll<Role>());
     }

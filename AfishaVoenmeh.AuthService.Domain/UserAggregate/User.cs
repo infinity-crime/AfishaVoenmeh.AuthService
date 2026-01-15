@@ -33,6 +33,5 @@ public class User : AggregateRoot<UserId>
     public void ApplyRole(Role role)
     {
         RoleId = role.Id;
-        Role = role;
     }
 }

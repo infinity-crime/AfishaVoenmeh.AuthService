@@ -4,6 +4,7 @@ using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Authentication;
 using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Persistence;
 using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Services;
 using AfishaVoenmeh.AuthService.Domain.UserAggregate;
+using AfishaVoenmeh.AuthService.Domain.UserAggregate.Entities;
 using AfishaVoenmeh.AuthService.Domain.UserAggregate.ValueObjects;
 using ErrorOr;
 using MediatR;
@@ -54,6 +55,8 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
             return userPasswordHash.FirstError;
 
         var newUser = new User(userCreds.Value, userEmail.Value, userPhoneNumber.Value, userPasswordHash.Value);
+
+        newUser.ApplyRole(Role.Student);
 
         await _userRepository.AddAsync(newUser, cancellationToken);
 
