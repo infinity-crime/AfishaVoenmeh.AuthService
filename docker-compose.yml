@@ -1,0 +1,16 @@
+services:
+    postgres:	
+        image: postgres:16
+        container_name: AuthService-PostgresContainer
+        restart: always
+        ports:
+            - "5433:5432"
+        volumes:
+            - postgresData:/var/lib/postgresql/data
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+volumes:
+    postgresData:
