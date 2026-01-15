@@ -1,4 +1,5 @@
 ﻿using AfishaVoenmeh.AuthService.Domain.Common.Abstract;
+using AfishaVoenmeh.AuthService.Domain.Common.Errors;
 using ErrorOr;
 using System;
 using System.Collections.Generic;
@@ -26,13 +27,13 @@ public class UserCredentials : ValueObject
     public static ErrorOr<UserCredentials> Create(string firstName, string lastName, string patronymic)
     {
         if (string.IsNullOrWhiteSpace(firstName))
-            return Error.Validation("UserCredentials_FirstName_Null", "First name cannot be null.");
+            return DomainErrors.EmptyCredsField;
 
         if(string.IsNullOrWhiteSpace(lastName))
-            return Error.Validation("UserCredentials_LastName_Null", "Last name cannot be null.");
+            return DomainErrors.EmptyCredsField;
 
-        if(string.IsNullOrWhiteSpace(patronymic))
-            return Error.Validation("UserCredentials_Patronymic_Null", "Patronymic cannot be null.");
+        if (string.IsNullOrWhiteSpace(patronymic))
+            return DomainErrors.EmptyCredsField;
 
         return new UserCredentials(firstName, lastName, patronymic);
     }

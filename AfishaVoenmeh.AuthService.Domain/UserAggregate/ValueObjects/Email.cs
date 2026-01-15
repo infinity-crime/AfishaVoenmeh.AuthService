@@ -1,4 +1,5 @@
 ﻿using AfishaVoenmeh.AuthService.Domain.Common.Abstract;
+using AfishaVoenmeh.AuthService.Domain.Common.Errors;
 using ErrorOr;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,8 @@ public class Email : ValueObject
 
     public static ErrorOr<Email> Create(string email)
     {
-        if(!IsValidEmail(email))
-            return Error.Validation("Email_Invalid", "Invalid email form. Host requires voenmeh.ru");
+        if (!IsValidEmail(email))
+            return DomainErrors.InvalidEmail;
 
         return new Email(email);
     }

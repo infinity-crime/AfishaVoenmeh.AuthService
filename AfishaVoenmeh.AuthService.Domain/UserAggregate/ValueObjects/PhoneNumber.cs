@@ -1,4 +1,5 @@
 ﻿using AfishaVoenmeh.AuthService.Domain.Common.Abstract;
+using AfishaVoenmeh.AuthService.Domain.Common.Errors;
 using ErrorOr;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,13 @@ public class PhoneNumber : ValueObject
     public static ErrorOr<PhoneNumber> Create(string phoneNumber)
     {
         if (string.IsNullOrWhiteSpace(phoneNumber))
-            return Error.Validation("PhoneNumber_Null", "Phone number cannot be null.");
+            return DomainErrors.EmptyPhoneNumber;
 
         if (!phoneNumber.StartsWith("+7"))
-            return Error.Validation("PhoneNumber_Invalid", "Phone number starts with +7");
+            return DomainErrors.InvalidPhoneNumberFormat;
 
         if (phoneNumber.Length != 12)
-            return Error.Validation("PhoneNumber_Length_Invalid", "Length phone number must be 11.");
+            return DomainErrors.InvalidPhoneNumberLength;
 
         return new PhoneNumber(phoneNumber);
     }

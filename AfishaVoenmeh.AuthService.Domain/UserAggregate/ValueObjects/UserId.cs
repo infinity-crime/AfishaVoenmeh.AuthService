@@ -1,4 +1,5 @@
 ﻿using AfishaVoenmeh.AuthService.Domain.Common.Abstract;
+using AfishaVoenmeh.AuthService.Domain.Common.Errors;
 using ErrorOr;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ public class UserId : ValueObject
     public static ErrorOr<UserId> CreateFrom(Guid id)
     {
         if (id == Guid.Empty)
-            return Error.Validation("UserId_Empty", "User Id cannot be empty.");
+            return DomainErrors.EmptyUserId;
 
         return new UserId(id);
     }
