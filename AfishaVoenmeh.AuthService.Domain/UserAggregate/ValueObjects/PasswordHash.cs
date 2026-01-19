@@ -1,4 +1,5 @@
 ﻿using AfishaVoenmeh.AuthService.Domain.Common.Abstract;
+using AfishaVoenmeh.AuthService.Domain.Common.Errors;
 using ErrorOr;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ public class PasswordHash : ValueObject
     public static ErrorOr<PasswordHash> Create(string hash)
     {
         if (string.IsNullOrWhiteSpace(hash))
-            return Error.Validation("PasswordHash_Null", "Password hash cannot be null.");
+            return DomainErrors.EmptyPasswordHash;
 
         return new PasswordHash(hash);
     }
