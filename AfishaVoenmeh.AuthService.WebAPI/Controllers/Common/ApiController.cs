@@ -23,6 +23,7 @@ public class ApiController : ControllerBase
     private IActionResult ValidationProblem(List<Error> errors)
     {
         var modelStateDictionary = new ModelStateDictionary();
+
         foreach (var error in errors)
             modelStateDictionary.AddModelError(error.Code, error.Description);
 
