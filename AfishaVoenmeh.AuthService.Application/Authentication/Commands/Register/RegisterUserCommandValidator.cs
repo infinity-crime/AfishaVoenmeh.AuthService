@@ -1,9 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AfishaVoenmeh.AuthService.Application.Authentication.Commands.Register;
 
@@ -44,6 +39,7 @@ public class RegisterUserCommandValidator : AbstractValidator<RegisterUserComman
         RuleFor(c => c.PhoneNumber)
             .NotEmpty()
             .WithMessage("Phone number cannot be empty.")
+            .Must(number => number.StartsWith("+7"))
             .Length(12)
             .WithMessage("The number must start with + and contain 11 digits.");
 

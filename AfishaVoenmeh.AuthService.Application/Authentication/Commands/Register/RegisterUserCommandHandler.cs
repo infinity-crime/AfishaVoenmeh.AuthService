@@ -38,24 +38,17 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
             return AuthenticationErrors.PasswordConfirmationFailed;
 
         var userCreds = UserCredentials.Create(command.FirstName, command.LastName, command.Patronymic);
-        if (userCreds.IsError)
-            return userCreds.FirstError;
 
         var userEmail = Email.Create(command.Email);
         if (userEmail.IsError)
             return userEmail.FirstError;
 
         var userPhoneNumber = PhoneNumber.Create(command.PhoneNumber);
-        if (userPhoneNumber.IsError)
-            return userPhoneNumber.FirstError;
 
         var hashedPassword = _passwordHasher.HashPassword(command.Password);
         var userPasswordHash = PasswordHash.Create(hashedPassword);
-        if (userPasswordHash.IsError)
-            return userPasswordHash.FirstError;
 
-        var newUser = new User(userCreds.Value, userEmail.Value, userPhoneNumber.Value, userPasswordHash.Value);
-
+        var newUser = new User(userCreds, userEmail.Value, userPhoneNumber, userPasswordHash);
         newUser.ApplyRole(Role.Student);
 
         await _userRepository.AddAsync(newUser, cancellationToken);

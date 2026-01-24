@@ -1,11 +1,4 @@
 ﻿using AfishaVoenmeh.AuthService.Domain.Common.Abstract;
-using AfishaVoenmeh.AuthService.Domain.Common.Errors;
-using ErrorOr;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AfishaVoenmeh.AuthService.Domain.UserAggregate.ValueObjects;
 
@@ -17,13 +10,7 @@ public class PasswordHash : ValueObject
 
     private PasswordHash(string value) => Value = value;
 
-    public static ErrorOr<PasswordHash> Create(string hash)
-    {
-        if (string.IsNullOrWhiteSpace(hash))
-            return DomainErrors.EmptyPasswordHash;
-
-        return new PasswordHash(hash);
-    }
+    public static PasswordHash Create(string hash) => new(hash);
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

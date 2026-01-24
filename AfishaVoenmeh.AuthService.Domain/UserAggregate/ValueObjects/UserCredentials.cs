@@ -1,11 +1,4 @@
 ﻿using AfishaVoenmeh.AuthService.Domain.Common.Abstract;
-using AfishaVoenmeh.AuthService.Domain.Common.Errors;
-using ErrorOr;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AfishaVoenmeh.AuthService.Domain.UserAggregate.ValueObjects;
 
@@ -24,19 +17,9 @@ public class UserCredentials : ValueObject
         Patronymic = patronymic;
     }
 
-    public static ErrorOr<UserCredentials> Create(string firstName, string lastName, string patronymic)
-    {
-        if (string.IsNullOrWhiteSpace(firstName))
-            return DomainErrors.EmptyCredsField;
+    public static UserCredentials Create(string firstName, string lastName, string patronymic) 
+        => new(firstName, lastName, patronymic);
 
-        if(string.IsNullOrWhiteSpace(lastName))
-            return DomainErrors.EmptyCredsField;
-
-        if (string.IsNullOrWhiteSpace(patronymic))
-            return DomainErrors.EmptyCredsField;
-
-        return new UserCredentials(firstName, lastName, patronymic);
-    }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

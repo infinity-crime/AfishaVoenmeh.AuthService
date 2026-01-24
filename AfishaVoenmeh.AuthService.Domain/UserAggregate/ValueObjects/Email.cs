@@ -1,12 +1,7 @@
 ﻿using AfishaVoenmeh.AuthService.Domain.Common.Abstract;
 using AfishaVoenmeh.AuthService.Domain.Common.Errors;
 using ErrorOr;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AfishaVoenmeh.AuthService.Domain.UserAggregate.ValueObjects;
 
@@ -33,8 +28,6 @@ public class Email : ValueObject
 
     private static bool IsValidEmail(string email)
     {
-        if (string.IsNullOrWhiteSpace(email)) return false;
-
         email = email.Trim();
 
         try
