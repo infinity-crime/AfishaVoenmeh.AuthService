@@ -20,12 +20,6 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
             .IsRequired()
             .HasMaxLength(50);
 
-        builder.HasMany(r => r.Users)
-            .WithOne(u => u.Role)
-            .HasForeignKey(u => u.RoleId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Restrict);
-
         builder.HasData(Enumeration.GetAll<Role>());
     }
 }

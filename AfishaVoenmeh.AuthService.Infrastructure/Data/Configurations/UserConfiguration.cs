@@ -1,4 +1,5 @@
 ﻿using AfishaVoenmeh.AuthService.Domain.UserAggregate;
+using AfishaVoenmeh.AuthService.Domain.UserAggregate.Entities;
 using AfishaVoenmeh.AuthService.Domain.UserAggregate.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -16,6 +17,15 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.Id)
             .HasConversion(id => id.Value, value => UserId.CreateFrom(value).Value)
             .ValueGeneratedNever();
+
+        builder.Property(u => u.RoleId)
+            .IsRequired()
+            .HasColumnName("RoleId");
+
+        builder.HasOne<Role>()
+            .WithMany()
+            .HasForeignKey(u => u.RoleId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.OwnsOne(u => u.Credentials, onb =>
         {

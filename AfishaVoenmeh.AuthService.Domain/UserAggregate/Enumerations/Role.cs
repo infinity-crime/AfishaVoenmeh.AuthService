@@ -21,6 +21,15 @@ public sealed class Role : Enumeration
 
     protected Role() : base() { } // EF Core
 
-    private readonly List<User> _users = new List<User>();
-    public IReadOnlyCollection<User> Users => _users.AsReadOnly();
+    public static Role CreateFromId(int id)
+    {
+        var role = GetAll<Role>()
+            .Where(r => r.Id == id)
+            .FirstOrDefault();
+
+        if (role is null)
+            throw new ArgumentException($"Role with Id {id} not found.", nameof(id));
+
+        return role;
+    }
 }

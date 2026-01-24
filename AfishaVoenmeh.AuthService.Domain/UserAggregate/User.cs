@@ -12,7 +12,7 @@ public class User : AggregateRoot<UserId>
     public PasswordHash PasswordHash { get; private set; }
 
     public int RoleId { get; private set; }
-    public Role Role { get; private set; }
+    public Role Role => Role.CreateFromId(RoleId);
 
     protected User() { } // EF Core
 
