@@ -5,12 +5,14 @@ using AfishaVoenmeh.AuthService.Contracts.Responses;
 using AfishaVoenmeh.AuthService.WebAPI.Controllers.Common;
 using MapsterMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AfishaVoenmeh.AuthService.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[AllowAnonymous]
 public class AuthController : ApiController
 {
     private readonly ISender _sender;
@@ -30,7 +32,7 @@ public class AuthController : ApiController
         var authResult = await _sender.Send(command, ct);
 
         return authResult.Match(
-            authResult => Created(HttpContext.Request.Path, authResult), 
+            authResult => Created(HttpContext.Request.Path, _mapper.Map<AuthenticationResponse>(authResult)), 
             errors => Problem(errors));
     }
 
@@ -42,7 +44,7 @@ public class AuthController : ApiController
         var authResult = await _sender.Send(query, ct);
 
         return authResult.Match(
-            authResult => Ok(authResult),
+            authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
             errors => Problem(errors));
     }
 }

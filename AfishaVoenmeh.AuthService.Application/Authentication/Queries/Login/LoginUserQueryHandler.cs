@@ -36,7 +36,7 @@ public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, ErrorOr<Aut
         if (!_passwordHasher.VerifyPassword(user.PasswordHash.Value, query.Password))
             return AuthenticationErrors.IncorrectPassword;
 
-        var token = _tokenGenerator.GenerateToken(user);
+        var token = _tokenGenerator.GenerateAccessToken(user);
 
         return MapToAuthResult(user, token);
     }

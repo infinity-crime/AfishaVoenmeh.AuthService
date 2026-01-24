@@ -10,9 +10,13 @@ public class User : AggregateRoot<UserId>
     public Email Email {  get; private set; }
     public PhoneNumber PhoneNumber { get; private set; }
     public PasswordHash PasswordHash { get; private set; }
-
     public int RoleId { get; private set; }
+
     public Role Role => Role.CreateFromId(RoleId);
+
+    // Refresh sessions associated with the user
+    private readonly List<RefreshSession> refreshSessions = [];
+    public IReadOnlyCollection<RefreshSession> RefreshSessions => refreshSessions.AsReadOnly();
 
     protected User() { } // EF Core
 

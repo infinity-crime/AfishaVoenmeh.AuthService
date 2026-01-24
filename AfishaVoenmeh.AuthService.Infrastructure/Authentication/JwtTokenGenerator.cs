@@ -1,8 +1,10 @@
 ﻿using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Authentication;
+using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Persistence;
 using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Services;
 using AfishaVoenmeh.AuthService.Domain.Common.Abstract;
 using AfishaVoenmeh.AuthService.Domain.UserAggregate;
 using AfishaVoenmeh.AuthService.Domain.UserAggregate.Entities;
+using AfishaVoenmeh.AuthService.Domain.UserAggregate.ValueObjects;
 using AfishaVoenmeh.AuthService.Infrastructure.Authentication.Common;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -11,6 +13,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,7 +31,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         _jwtOptions = options.Value;
     }
 
-    public string GenerateToken(User user)
+    public string GenerateAccessToken(User user)
     {
         var userRole = Enumeration.GetAll<Role>()
             .Where(role => role.Id == user.RoleId)

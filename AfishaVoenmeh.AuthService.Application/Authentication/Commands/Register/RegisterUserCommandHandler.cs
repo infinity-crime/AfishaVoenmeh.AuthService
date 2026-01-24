@@ -4,7 +4,6 @@ using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Authentication;
 using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Persistence;
 using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Services;
 using AfishaVoenmeh.AuthService.Domain.UserAggregate;
-using AfishaVoenmeh.AuthService.Domain.UserAggregate.Entities;
 using AfishaVoenmeh.AuthService.Domain.UserAggregate.ValueObjects;
 using ErrorOr;
 using MediatR;
@@ -37,14 +36,12 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
         if (command.Password != command.PasswordConfirmation)
             return AuthenticationErrors.PasswordConfirmationFailed;
 
-        var userCreds = UserCredentials.Create(command.FirstName, command.LastName, command.Patronymic);
-
         var userEmail = Email.Create(command.Email);
         if (userEmail.IsError)
             return userEmail.FirstError;
 
+        var userCreds = UserCredentials.Create(command.FirstName, command.LastName, command.Patronymic);
         var userPhoneNumber = PhoneNumber.Create(command.PhoneNumber);
-
         var hashedPassword = _passwordHasher.HashPassword(command.Password);
         var userPasswordHash = PasswordHash.Create(hashedPassword);
 
@@ -52,7 +49,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
 
         await _userRepository.AddAsync(newUser, cancellationToken);
 
-        var token = _tokenGenerator.GenerateToken(newUser);
+        var token = _tokenGenerator.GenerateAccessToken(newUser);
 
         return MapToAuthResult(newUser, token);
     }

@@ -1,4 +1,6 @@
 ﻿using AfishaVoenmeh.AuthService.Domain.UserAggregate;
+using AfishaVoenmeh.AuthService.Domain.UserAggregate.Entities;
+using AfishaVoenmeh.AuthService.Domain.UserAggregate.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +11,5 @@ namespace AfishaVoenmeh.AuthService.Application.Common.Interfaces.Authentication
 
 public interface IJwtTokenGenerator
 {
-    string GenerateToken(User user);
+    string GenerateAccessToken(User user);
 }
