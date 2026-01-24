@@ -49,7 +49,6 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
         var userPasswordHash = PasswordHash.Create(hashedPassword);
 
         var newUser = new User(userCreds, userEmail.Value, userPhoneNumber, userPasswordHash);
-        newUser.ApplyRole(Role.Student);
 
         await _userRepository.AddAsync(newUser, cancellationToken);
 

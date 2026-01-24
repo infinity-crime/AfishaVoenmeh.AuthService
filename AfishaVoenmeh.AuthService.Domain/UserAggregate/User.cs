@@ -23,6 +23,8 @@ public class User : AggregateRoot<UserId>
         Email = email;
         PhoneNumber = phoneNumber;
         PasswordHash = passwordHash;
+
+        RoleId = Role.Student.Id;
     }
 
     public void ApplyRole(Role role)
