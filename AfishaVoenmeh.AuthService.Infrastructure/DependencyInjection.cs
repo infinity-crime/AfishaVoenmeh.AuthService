@@ -26,10 +26,13 @@ public static class DependencyInjection
 
         services.AddApplicationDbContext(configuration);
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRefreshSessionRepository, RefreshSessionRepository>();
 
         services.AddJwtBearerAuth(configuration);
 
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
+
+        services.AddScoped<IRefreshSessionService, RefreshTokenService>();
 
         return services;
     }
@@ -50,7 +53,8 @@ public static class DependencyInjection
                     ValidAudience = configuration[JwtOptions.AudienceSection],
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8
-                        .GetBytes(configuration[JwtOptions.IssuerSigningKeySection]!))
+                        .GetBytes(configuration[JwtOptions.IssuerSigningKeySection]!)),
+                    ClockSkew = TimeSpan.Zero
                 };
             });
     }

@@ -1,4 +1,5 @@
 ﻿using AfishaVoenmeh.AuthService.Application.Authentication.Commands.Register;
+using AfishaVoenmeh.AuthService.Application.Authentication.Common;
 using AfishaVoenmeh.AuthService.Application.Authentication.Queries.Login;
 using AfishaVoenmeh.AuthService.Contracts.Requests;
 using AfishaVoenmeh.AuthService.Contracts.Responses;
@@ -32,7 +33,7 @@ public class AuthController : ApiController
         var authResult = await _sender.Send(command, ct);
 
         return authResult.Match(
-            authResult => Created(HttpContext.Request.Path, _mapper.Map<AuthenticationResponse>(authResult)), 
+            authResult => SuccessRegister(authResult), 
             errors => Problem(errors));
     }
 
@@ -44,7 +45,37 @@ public class AuthController : ApiController
         var authResult = await _sender.Send(query, ct);
 
         return authResult.Match(
-            authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
+            authResult => SuccessLogin(authResult),
             errors => Problem(errors));
+    }
+
+    private CreatedResult SuccessRegister(AuthenticationResult authenticationResult)
+    {
+        Response.Cookies.Append("refresh-cookie", authenticationResult.RefreshToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = authenticationResult.RefreshTokenExpiration
+        });
+
+        var response = _mapper.Map<AuthenticationResponse>(authenticationResult);
+
+        return Created(HttpContext.Request.Path, response);
+    }
+
+    private OkObjectResult SuccessLogin(AuthenticationResult authenticationResult)
+    {
+        Response.Cookies.Append("refresh-cookie", authenticationResult.RefreshToken, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = authenticationResult.RefreshTokenExpiration
+        });
+
+        var response = _mapper.Map<AuthenticationResponse>(authenticationResult);
+
+        return Ok(response);
     }
 }

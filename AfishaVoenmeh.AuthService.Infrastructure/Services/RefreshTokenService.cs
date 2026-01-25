@@ -1,4 +1,5 @@
-﻿using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Persistence;
+﻿using AfishaVoenmeh.AuthService.Application.Common.DTOs;
+using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Persistence;
 using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Services;
 using AfishaVoenmeh.AuthService.Domain.UserAggregate.Entities;
 using AfishaVoenmeh.AuthService.Domain.UserAggregate.ValueObjects;
@@ -29,13 +30,19 @@ public class RefreshTokenService : IRefreshSessionService
         return Convert.ToBase64String(bytes);
     }
 
-    public Task<RefreshSession> GetRefreshSessionAsync(string token, CancellationToken ct = default)
+    public async Task<RefreshSessionResult?> GetRefreshSessionAsync(string token, CancellationToken ct = default)
     {
-        // TODO: Implement method to retrieve refresh session by token
-        throw new NotImplementedException();
+        if(string.IsNullOrEmpty(token))
+            return null;
+
+        var refreshSession = await _refreshSessionRepository.GetByTokenAsync(token, ct);
+        
+        return refreshSession != null 
+            ? new RefreshSessionResult(refreshSession.Token, refreshSession.ExpiresAt) 
+            : null;
     }
 
-    public async Task<RefreshSession> CreateRefreshSessionAsync(UserId userId, string token, 
+    public async Task<RefreshSessionResult> CreateRefreshSessionAsync(UserId userId, string token, 
         CancellationToken ct = default)
     {
         var refreshSession = RefreshSession.Create(
@@ -45,6 +52,8 @@ public class RefreshTokenService : IRefreshSessionService
 
         await _refreshSessionRepository.AddAsync(refreshSession, ct);
 
-        return refreshSession;
+        return new RefreshSessionResult(
+            refreshSession.Token,
+            refreshSession.ExpiresAt);
     }
 }

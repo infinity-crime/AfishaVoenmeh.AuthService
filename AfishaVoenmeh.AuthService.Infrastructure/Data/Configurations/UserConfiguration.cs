@@ -27,6 +27,12 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(u => u.RoleId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasMany(u => u.RefreshSessions)
+            .WithOne()
+            .HasForeignKey(rs => rs.UserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.OwnsOne(u => u.Credentials, onb =>
         {
             onb.Property(c => c.FirstName).HasColumnName("FirstName");

@@ -4,7 +4,7 @@ namespace AfishaVoenmeh.AuthService.Application.Common.Interfaces.Persistence;
 
 public interface IRefreshSessionRepository
 {
-    Task<RefreshSession> GetByTokenHashAsync(string tokenHash, CancellationToken ct = default);
+    Task<RefreshSession?> GetByTokenAsync(string token, CancellationToken ct = default);
     Task AddAsync(RefreshSession refreshSession, CancellationToken ct = default);
-    Task RemoveAsync(Guid refreshSessionId, CancellationToken ct = default);
+    Task RemoveAsync(RefreshSession refreshSession, CancellationToken ct = default);
 }

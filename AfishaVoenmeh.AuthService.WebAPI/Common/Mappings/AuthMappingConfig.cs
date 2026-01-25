@@ -13,7 +13,8 @@ public class AuthMappingConfig : IRegister
     {
         config.NewConfig<RegisterUserRequest, RegisterUserCommand>();
 
-        config.NewConfig<AuthenticationResult, AuthenticationResponse>();
+        config.NewConfig<AuthenticationResult, AuthenticationResponse>()
+            .Map(dest => dest.Token, src => src.AccessToken);
 
         config.NewConfig<LoginUserRequest, LoginUserQuery>();
     }

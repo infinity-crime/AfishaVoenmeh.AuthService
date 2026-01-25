@@ -11,4 +11,6 @@ public record AuthenticationResult(
     string FirstName,
     string LastName,
     string Patronymic,
-    string Token);
+    string AccessToken,
+    string RefreshToken,
+    DateTime RefreshTokenExpiration);

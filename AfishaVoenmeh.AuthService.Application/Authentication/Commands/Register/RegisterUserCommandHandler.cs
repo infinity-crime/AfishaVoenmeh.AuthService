@@ -1,4 +1,5 @@
 ﻿using AfishaVoenmeh.AuthService.Application.Authentication.Common;
+using AfishaVoenmeh.AuthService.Application.Common.DTOs;
 using AfishaVoenmeh.AuthService.Application.Common.Errors;
 using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Authentication;
 using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Persistence;
@@ -13,18 +14,19 @@ namespace AfishaVoenmeh.AuthService.Application.Authentication.Commands.Register
 public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, ErrorOr<AuthenticationResult>>
 {
     private readonly IUserRepository _userRepository;
-
     private readonly IJwtTokenGenerator _tokenGenerator;
-
+    private readonly IRefreshSessionService _refreshSessionService;
     private readonly IPasswordHasher _passwordHasher;
 
     public RegisterUserCommandHandler(
         IJwtTokenGenerator tokenGenerator,
+        IRefreshSessionService refreshSessionService,
         IUserRepository userRepository,
         IPasswordHasher passwordHasher)
     {
         _userRepository = userRepository;
         _tokenGenerator = tokenGenerator;
+        _refreshSessionService = refreshSessionService;
         _passwordHasher = passwordHasher;
     }
 
@@ -51,16 +53,21 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, E
 
         var token = _tokenGenerator.GenerateAccessToken(newUser);
 
-        return MapToAuthResult(newUser, token);
+        var refreshToken = _refreshSessionService.GenerateRefreshToken();
+        var refreshResult = await _refreshSessionService.CreateRefreshSessionAsync(newUser.Id, refreshToken, cancellationToken);
+
+        return MapToAuthResult(newUser, token, refreshResult);
     }
 
-    private static AuthenticationResult MapToAuthResult(User newUser, string token)
+    private static AuthenticationResult MapToAuthResult(User newUser, string token, RefreshSessionResult result)
     {
         return new AuthenticationResult(
                     newUser.Id.Value,
                     newUser.Credentials.FirstName,
                     newUser.Credentials.LastName,
                     newUser.Credentials.Patronymic,
-                    token);
+                    token,
+                    result.Token,
+                    result.ExpiresAt);
     }
 }
