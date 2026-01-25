@@ -1,0 +1,13 @@
+﻿global using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Authentication;
+global using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Persistence;
+global using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Services;
+global using AfishaVoenmeh.AuthService.Infrastructure.Authentication;
+global using AfishaVoenmeh.AuthService.Infrastructure.Authentication.Common;
+global using AfishaVoenmeh.AuthService.Infrastructure.Data;
+global using AfishaVoenmeh.AuthService.Infrastructure.Data.Repositories;
+global using AfishaVoenmeh.AuthService.Infrastructure.Services;
+global using AfishaVoenmeh.AuthService.Application.Common.DTOs;
+global using AfishaVoenmeh.AuthService.Domain.UserAggregate.Entities;
+global using AfishaVoenmeh.AuthService.Domain.UserAggregate.ValueObjects;
+global using AfishaVoenmeh.AuthService.Domain.UserAggregate;
+global using AfishaVoenmeh.AuthService.Domain.Common.Abstract;

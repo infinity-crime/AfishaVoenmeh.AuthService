@@ -1,20 +1,16 @@
-﻿using AfishaVoenmeh.AuthService.Application.Common.DTOs;
-using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Persistence;
-using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Services;
-using AfishaVoenmeh.AuthService.Domain.UserAggregate.Entities;
-using AfishaVoenmeh.AuthService.Domain.UserAggregate.ValueObjects;
-using AfishaVoenmeh.AuthService.Infrastructure.Authentication.Common;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
 
 namespace AfishaVoenmeh.AuthService.Infrastructure.Services;
 
-public class RefreshTokenService : IRefreshSessionService
+public class RefreshSessionService : IRefreshSessionService
 {
     private readonly IRefreshSessionRepository _refreshSessionRepository;
     private readonly JwtOptions _jwtOptions;
 
-    public RefreshTokenService(IRefreshSessionRepository refreshSessionRepository, IOptions<JwtOptions> jwtOptions)
+    public RefreshSessionService(
+        IRefreshSessionRepository refreshSessionRepository, 
+        IOptions<JwtOptions> jwtOptions)
     {
         _refreshSessionRepository = refreshSessionRepository;
         _jwtOptions = jwtOptions.Value;

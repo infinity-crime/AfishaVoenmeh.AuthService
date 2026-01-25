@@ -1,12 +1,5 @@
-﻿using AfishaVoenmeh.AuthService.Domain.UserAggregate;
-using AfishaVoenmeh.AuthService.Domain.UserAggregate.Entities;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AfishaVoenmeh.AuthService.Infrastructure.Data;
 

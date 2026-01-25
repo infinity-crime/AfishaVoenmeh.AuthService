@@ -1,12 +1,4 @@
-﻿using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Authentication;
-using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Persistence;
-using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Services;
-using AfishaVoenmeh.AuthService.Infrastructure.Authentication;
-using AfishaVoenmeh.AuthService.Infrastructure.Authentication.Common;
-using AfishaVoenmeh.AuthService.Infrastructure.Data;
-using AfishaVoenmeh.AuthService.Infrastructure.Data.Repositories;
-using AfishaVoenmeh.AuthService.Infrastructure.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +24,7 @@ public static class DependencyInjection
 
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
-        services.AddScoped<IRefreshSessionService, RefreshTokenService>();
+        services.AddScoped<IRefreshSessionService, RefreshSessionService>();
 
         return services;
     }

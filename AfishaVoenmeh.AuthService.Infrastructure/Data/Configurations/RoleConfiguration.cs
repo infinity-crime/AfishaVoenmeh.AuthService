@@ -1,6 +1,4 @@
-﻿using AfishaVoenmeh.AuthService.Domain.Common.Abstract;
-using AfishaVoenmeh.AuthService.Domain.UserAggregate.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AfishaVoenmeh.AuthService.Infrastructure.Data.Configurations;

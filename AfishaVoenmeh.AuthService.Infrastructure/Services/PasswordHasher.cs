@@ -1,14 +1,6 @@
-﻿using AfishaVoenmeh.AuthService.Application.Common.Interfaces.Services;
-using AfishaVoenmeh.AuthService.Domain.UserAggregate;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace AfishaVoenmeh.AuthService.Infrastructure.Services;
 
