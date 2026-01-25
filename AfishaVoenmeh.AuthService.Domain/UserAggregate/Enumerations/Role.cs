@@ -27,6 +27,7 @@ public sealed class Role : Enumeration
             .Where(r => r.Id == id)
             .FirstOrDefault();
 
+        // TODO: ErrorOr pattern implementation
         if (role is null)
             throw new ArgumentException($"Role with Id {id} not found.", nameof(id));
 

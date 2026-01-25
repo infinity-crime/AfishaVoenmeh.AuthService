@@ -1,3 +1,8 @@
-﻿namespace AfishaVoenmeh.AuthService.Application.Common.DTOs;
+﻿using AfishaVoenmeh.AuthService.Domain.UserAggregate.ValueObjects;
 
-public record RefreshSessionResult(string Token, DateTime ExpiresAt);
+namespace AfishaVoenmeh.AuthService.Application.Common.DTOs;
+
+public record RefreshSessionResult(
+    UserId UserId, 
+    string Token, 
+    DateTime ExpiresAt);

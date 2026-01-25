@@ -1,4 +1,5 @@
-﻿using AfishaVoenmeh.AuthService.Application.Authentication.Commands.Register;
+﻿using AfishaVoenmeh.AuthService.Application.Authentication.Commands.Refresh;
+using AfishaVoenmeh.AuthService.Application.Authentication.Commands.Register;
 using AfishaVoenmeh.AuthService.Application.Authentication.Common;
 using AfishaVoenmeh.AuthService.Application.Authentication.Queries.Login;
 using AfishaVoenmeh.AuthService.Contracts.Requests;
@@ -33,7 +34,7 @@ public class AuthController : ApiController
         var authResult = await _sender.Send(command, ct);
 
         return authResult.Match(
-            authResult => SuccessRegister(authResult), 
+            authResult => SuccessAuth(authResult), 
             errors => Problem(errors));
     }
 
@@ -45,26 +46,22 @@ public class AuthController : ApiController
         var authResult = await _sender.Send(query, ct);
 
         return authResult.Match(
-            authResult => SuccessLogin(authResult),
+            authResult => SuccessAuth(authResult),
             errors => Problem(errors));
     }
 
-    private CreatedResult SuccessRegister(AuthenticationResult authenticationResult)
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshToken(CancellationToken cancellationToken)
     {
-        Response.Cookies.Append("refresh-cookie", authenticationResult.RefreshToken, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = authenticationResult.RefreshTokenExpiration
-        });
+        if(!Request.Cookies.TryGetValue("refresh-token", out string? refreshToken))
+            return Unauthorized();
 
-        var response = _mapper.Map<AuthenticationResponse>(authenticationResult);
+        var command = new RefreshTokenCommand(refreshToken);
 
-        return Created(HttpContext.Request.Path, response);
+        var refreshTokenResult = await _sender.Send(command, cancellationToken);
     }
 
-    private OkObjectResult SuccessLogin(AuthenticationResult authenticationResult)
+    private OkObjectResult SuccessAuth(AuthenticationResult authenticationResult)
     {
         Response.Cookies.Append("refresh-cookie", authenticationResult.RefreshToken, new CookieOptions
         {

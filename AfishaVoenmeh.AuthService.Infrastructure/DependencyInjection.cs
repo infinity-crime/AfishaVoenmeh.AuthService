@@ -13,18 +13,11 @@ public static class DependencyInjection
     {
         services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.Section));
 
-        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-        services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
-
         services.AddApplicationDbContext(configuration);
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IRefreshSessionRepository, RefreshSessionRepository>();
-
+        
         services.AddJwtBearerAuth(configuration);
 
-        services.AddSingleton<IPasswordHasher, PasswordHasher>();
-
-        services.AddScoped<IRefreshSessionService, RefreshSessionService>();
+        services.AddRepositoriesAndServices();
 
         return services;
     }
@@ -59,5 +52,18 @@ public static class DependencyInjection
         {
             options.UseNpgsql(connectionString);
         });
+    }
+
+    private static void AddRepositoriesAndServices(this IServiceCollection services)
+    {
+        // Repositories
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRefreshSessionRepository, RefreshSessionRepository>();
+
+        // Services
+        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+        services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddSingleton<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IRefreshSessionService, RefreshSessionService>();
     }
 }

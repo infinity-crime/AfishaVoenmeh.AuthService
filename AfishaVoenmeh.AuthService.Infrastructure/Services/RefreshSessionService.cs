@@ -34,7 +34,7 @@ public class RefreshSessionService : IRefreshSessionService
         var refreshSession = await _refreshSessionRepository.GetByTokenAsync(token, ct);
         
         return refreshSession != null 
-            ? new RefreshSessionResult(refreshSession.Token, refreshSession.ExpiresAt) 
+            ? new RefreshSessionResult(refreshSession.UserId, refreshSession.Token, refreshSession.ExpiresAt) 
             : null;
     }
 
@@ -49,6 +49,7 @@ public class RefreshSessionService : IRefreshSessionService
         await _refreshSessionRepository.AddAsync(refreshSession, ct);
 
         return new RefreshSessionResult(
+            refreshSession.UserId,
             refreshSession.Token,
             refreshSession.ExpiresAt);
     }
